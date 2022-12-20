@@ -1,0 +1,389 @@
+Last login: Mon Dec 19 17:43:27 on ttys000
+(base) jinyanxiang@MacBook-Pro ~ % cd /Users/jinyanxiang/Desktop/Github/inequality_poverty
+(base) jinyanxiang@MacBook-Pro inequality_poverty % cd /Users/jinyanxiang/Desktop/Github/inequality_poverty/inequality_poverty
+(base) jinyanxiang@MacBook-Pro inequality_poverty % python3 inequality_poverty_studies.py
+The working directory is
+ /Users/jinyanxiang/Desktop/Github/inequality_poverty/inequality_poverty
+
+
+
+:::STUDY DESIGNS & DATA CAN BE FOUND AT https://osf.io/pyuek/?view_only=1ffd9c21463d403dbef6fa9fbb74a2c8:::
+
+
+
+Please provide the file paths of S1, S2, S3as the second, third and fourth arguments
+
+Example: python3 inequality_poverty_studies.py S1_inequality_poverty_survey.csv S2_inequality_poverty_experiment.csv S3_inequality_poverty_IAT.csv
+(base) jinyanxiang@MacBook-Pro inequality_poverty % python3 inequality_poverty_studies.py S1_inequality_poverty_survey.csv S2_inequality_poverty_experiment.csv S3_inequality_poverty_IAT.csv
+The working directory is
+ /Users/jinyanxiang/Desktop/Github/inequality_poverty/inequality_poverty
+
+
+
+:::STUDY DESIGNS & DATA CAN BE FOUND AT https://osf.io/pyuek/?view_only=1ffd9c21463d403dbef6fa9fbb74a2c8:::
+
+
+
+...Loading data...
+  STUDY1 - MULTI-LEVEL DESIGN SURVEY: S1_inequality_poverty_survey.csv
+  STUDY2 - MIXED DESIGN EXPERIMENT: S2_inequality_poverty_experiment.csv 
+  STUDY3 - IAT :S3_inequality_poverty_IAT.csv
+
+
+:::STUDY 1: DATA PROCESSING AND ANALYSIS:::
+
+
+...transforming and processing the data of study 1...
+
+inequality_poverty_studies.py:189: FutureWarning: The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+  df_survey_master_temp = transform_survey_data(df_sub1).append(transform_survey_data(df_sub2))
+
+...running mixed-effects generalized liner model for the cross-country condition...
+fixed effects of income group (i.e., rich, poor, vs. others), the Gini index (i.e., 0.2 to 0.7) and the interaction between income group and Gini index 
+random intercepts for participants to account for the clustering
+
+Coding information of income group: 1 = rich, 2 = poor 
+
+                   count       mean        std  min   25%   50%    75%    max
+income_group gini                                                            
+poor         0.2   504.0  30.679167  21.712846  0.0  20.0  25.0  40.00  100.0
+             0.3   504.0  32.404762  20.151878  0.0  20.0  30.0  40.00  100.0
+             0.4   504.0  33.906746  19.622784  0.0  20.0  30.0  40.00  100.0
+             0.5   504.0  35.853175  21.347924  0.0  21.5  35.0  50.00  100.0
+             0.6   504.0  37.955556  21.359535  0.0  25.0  36.0  50.00  100.0
+             0.7   504.0  38.997222  23.579804  0.0  20.0  35.0  55.00  100.0
+rich         0.2   504.0  26.050794  21.239395  0.0  10.0  20.0  40.00  100.0
+             0.3   504.0  27.489683  20.849597  0.0  10.0  25.0  40.00  100.0
+             0.4   504.0  27.199802  20.155056  0.0  10.0  25.0  40.00  100.0
+             0.5   504.0  28.850397  21.900701  0.0  10.0  25.0  45.75  100.0
+             0.6   504.0  28.791667  22.049851  0.0  10.0  25.0  41.25  100.0
+             0.7   504.0  29.615873  24.614529  0.0  10.0  25.0  45.00  100.0                   Mixed Linear Model Regression Results
+=========================================================================
+Model:                  MixedLM      Dependent Variable:      perception 
+No. Observations:       6048         Method:                  REML       
+No. Groups:             504          Scale:                   383.2199   
+Min. group size:        12           Log-Likelihood:          -26886.3818
+Max. group size:        12           Converged:               Yes        
+Mean group size:        12.0                                             
+-------------------------------------------------------------------------
+                               Coef.  Std.Err.   z    P>|z| [0.025 0.975]
+-------------------------------------------------------------------------
+Intercept                      24.993    1.082 23.103 0.000 22.873 27.114
+C(income_group_code)[T.2]       2.234    1.419  1.575 0.115 -0.547  5.015
+gini                            6.681    2.084  3.205 0.001  2.595 10.766
+C(income_group_code)[T.2]:gini 10.516    2.948  3.567 0.000  4.739 16.294
+id Var                         82.562    0.385                           
+=========================================================================
+
+
+...virsualizing the results for the cross-country condition...
+
+
+...running mixed-effects generalized liner model for the over-time condition & saving the figure...
+
+Coding information of income group: 1 = rich, 2 = poor 
+
+                   count       mean        std  min   25%   50%    75%    max
+income_group gini                                                            
+poor         0.2   506.0  32.763834  20.833618  0.0  20.0  30.0  40.00  100.0
+             0.3   506.0  33.968379  19.121265  0.0  20.0  30.0  40.00  100.0
+             0.4   506.0  34.905138  18.657488  0.0  20.0  30.0  45.00  100.0
+             0.5   506.0  37.416996  19.255706  0.0  25.0  35.0  50.00  100.0
+             0.6   506.0  38.573123  20.228903  0.0  25.0  37.5  50.00  100.0
+             0.7   506.0  40.084387  22.222524  0.0  25.0  35.0  54.75  100.0
+rich         0.2   506.0  25.659091  20.385271  0.0  10.0  20.0  40.00  100.0
+             0.3   506.0  26.586957  19.257745  0.0  10.0  25.0  35.00   97.0
+             0.4   506.0  27.669960  19.919734  0.0  10.0  25.0  40.00  100.0
+             0.5   506.0  28.922925  20.793754  0.0  10.0  25.0  45.00  100.0
+             0.6   506.0  29.062253  21.211513  0.0  10.0  25.0  41.00  100.0
+             0.7   506.0  29.574901  23.182911  0.0  10.0  25.0  43.75  100.0                   Mixed Linear Model Regression Results
+=========================================================================
+Model:                  MixedLM      Dependent Variable:      perception 
+No. Observations:       6072         Method:                  REML       
+No. Groups:             506          Scale:                   349.0147   
+Min. group size:        12           Log-Likelihood:          -26694.8490
+Max. group size:        12           Converged:               Yes        
+Mean group size:        12.0                                             
+-------------------------------------------------------------------------
+                               Coef.  Std.Err.   z    P>|z| [0.025 0.975]
+-------------------------------------------------------------------------
+Intercept                      24.280    1.025 23.693 0.000 22.271 26.288
+C(income_group_code)[T.2]       5.201    1.351  3.848 0.000  2.552  7.849
+gini                            8.074    1.985  4.067 0.000  4.183 11.965
+C(income_group_code)[T.2]:gini  7.049    2.808  2.511 0.012  1.546 12.552
+id Var                         69.338    0.346                           
+=========================================================================
+
+
+...virsualizing the results for the over-time condition & saving the figure...
+
+
+...getting the demographic information of Study 1...
+
+demographic information for ideology:
+       ideology  count  percent
+0       Liberal    392    0.388
+1       Neutral    289    0.286
+2  Conservative    202    0.200
+3  conservative    127    0.126
+demographic information for education:
+                  education  count  percent
+0  Four-year college degree    287    0.284
+1              Some college    253    0.250
+2      High school graduate    177    0.175
+3       Professional degree    149    0.148
+4   Two-year college degree     93    0.092
+5                 Doctorate     31    0.031
+6     Less than high school     20    0.020
+demographic information for income:
+               income  count  percent
+0   100,000 - 149,999    172    0.170
+1     30,000 - 39,999    110    0.109
+2     40,000 - 49,999    105    0.104
+3     50,000 - 59,999    101    0.100
+4     20,000 - 29,999     93    0.092
+5     70,000 - 79,999     84    0.083
+6     10,000 - 19,999     77    0.076
+7     60,000 - 69,999     60    0.059
+8   More than 150,000     59    0.058
+9     90,000 - 99,999     55    0.054
+10   Less than 10,000     50    0.050
+11    80,000 - 89,999     44    0.044
+demographic information for religion:
+         religion  count  percent
+0      Protestant    310    0.307
+1        Catholic    253    0.250
+2     No religion    218    0.216
+3        Agnostic     71    0.070
+4         Atheist     57    0.056
+5  Other religion     49    0.049
+6          Jewish     23    0.023
+7          Muslim     16    0.016
+8          Mormon     13    0.013
+demographic information for gender:
+   gender  count  percent
+0  Female    510    0.505
+1    Male    500    0.495
+demographic information for age:
+     age          stat
+0  count   1010.000000
+1   mean    111.347525
+2    std   1445.402123
+3    min     18.000000
+4    25%     34.000000
+5    50%     47.000000
+6    75%     63.000000
+7    max  37055.000000
+demographic information for hispanic:
+  hispanic  count  percent
+0       No    924    0.915
+1      Yes     86    0.085
+demographic information for ethnicity:
+                             ethnicity  count  percent
+0                                White    765    0.757
+1            Black or African American    111    0.110
+2                             Hispanic     86    0.085
+3                                Asian     28    0.028
+4                                Other     13    0.013
+5     American Indian or Alaska Native      5    0.005
+6  Native Hawaiian or Pacific Islander      2    0.002
+
+...saving df_survey_master (full) for S1...
+
+
+...saving df_survey_master_time (over time) for S1...
+
+
+...saving df_survey_master_country (across country) for S1...
+
+
+...saving df_survey_demo (demo information) for S1...
+
+
+:::STUDY 2: DATA PROCESSING AND ANALYSIS:::
+
+
+...transforming and processing the data of study 2...
+
+
+...running mixed-design ANOVA...
+within factor: income group (2 level), between-subject factor: economic inequality (3 level)
+
+/opt/anaconda3/lib/python3.8/site-packages/pingouin/parametric.py:551: FutureWarning: Not prepending group keys to the result index of transform-like apply. In the future, the group keys will be included in the index, regardless of whether the applied function returns a like-indexed object.
+To preserve the previous behavior, use
+
+	>>> .groupby(..., group_keys=False)
+
+To adopt the future behavior and silence this warning, use 
+
+	>>> .groupby(..., group_keys=True)
+  ss_resall = grp_with.apply(lambda x: (x - x.mean()) ** 2).sum()
+/opt/anaconda3/lib/python3.8/site-packages/pingouin/parametric.py:992: FutureWarning: Not prepending group keys to the result index of transform-like apply. In the future, the group keys will be included in the index, regardless of whether the applied function returns a like-indexed object.
+To preserve the previous behavior, use
+
+	>>> .groupby(..., group_keys=False)
+
+To adopt the future behavior and silence this warning, use 
+
+	>>> .groupby(..., group_keys=True)
+  sserror = grp.apply(lambda x: (x - x.mean()) ** 2).sum()
+/opt/anaconda3/lib/python3.8/site-packages/pingouin/parametric.py:1512: FutureWarning: Not prepending group keys to the result index of transform-like apply. In the future, the group keys will be included in the index, regardless of whether the applied function returns a like-indexed object.
+To preserve the previous behavior, use
+
+	>>> .groupby(..., group_keys=False)
+
+To adopt the future behavior and silence this warning, use 
+
+	>>> .groupby(..., group_keys=True)
+  ss_resall = grp.apply(lambda x: (x - x.mean()) ** 2).sum()
+                         count       mean        std  min   25%   50%   75%    max
+inequality income_group                                                           
+high       poor           70.0  42.185714  26.133599  0.0  20.0  40.0  60.0  100.0
+           rich           70.0  14.307143  16.359479  0.0   4.0   8.5  20.0   70.0
+low        poor           74.0  31.121622  27.219027  1.0  10.0  20.0  40.0  100.0
+           rich           74.0  20.311486  28.116154  0.0   2.0   8.5  20.0   98.0
+medium     poor           71.0  36.859155  23.317863  3.0  20.0  30.0  55.0   98.0
+           rich           71.0  15.462394  16.125064  0.0   2.5  10.0  22.5   60.0          Source         SS  DF1  DF2         MS       F  p-unc    ng2  eps
+0    inequality    519.157    2  212    259.579   0.452  0.637  0.002  NaN
+1  income_group  42414.407    1  212  42414.407  80.317  0.000  0.154  1.0
+2   Interaction   5364.551    2  212   2682.275   5.079  0.007  0.022  NaN
+
+...virsualizing the results for the mixed-design experiment..
+
+
+...getting the demographic information of Study 2...
+
+demographic information for ideology:
+       ideology  count  percent
+0       Liberal     95    0.442
+1  Conservative     71    0.330
+2       Neutral     40    0.186
+3  conservative      9    0.042
+demographic information for income:
+               income  count  percent
+0   More than 150,000     70    0.326
+1   100,000 - 149,999     52    0.242
+2    Less than 10,000     27    0.126
+3     90,000 - 99,999     14    0.065
+4     50,000 - 59,999     10    0.047
+5     70,000 - 79,999     10    0.047
+6     60,000 - 69,999      9    0.042
+7     80,000 - 89,999      8    0.037
+8     30,000 - 39,999      6    0.028
+9     10,000 - 19,999      4    0.019
+10    20,000 - 29,999      3    0.014
+11    40,000 - 49,999      2    0.009
+demographic information for gender:
+   gender  count  percent
+0  Female    135    0.628
+1    Male     80    0.372
+demographic information for age:
+     age        stat
+0  count  215.000000
+1   mean   20.483721
+2    std    1.335519
+3    min   18.000000
+4    25%   20.000000
+5    50%   20.000000
+6    75%   21.000000
+7    max   34.000000
+
+...saving df_exp_transformed (long format)for S2...
+
+
+:::STUDY 3: DATA PROCESSING AND POST-HOC ANALYSIS::
+
+
+...getting the demographic information of Study 3...
+
+demographic information for gender:
+   gender  count  percent
+0    Male     69     0.69
+1  Female     31     0.31
+demographic information for age:
+     age       stat
+0  count  100.00000
+1   mean   37.49000
+2    std    7.75964
+3    min   23.00000
+4    25%   35.00000
+5    50%   36.00000
+6    75%   40.00000
+7    max   69.00000
+demographic information for hispanic:
+  hispanic  count  percent
+0        0     98     0.98
+1      Yes      2     0.02
+demographic information for ethinicity:
+  ethinicity       stat
+0      count  98.000000
+1       mean   1.357143
+2        std   0.965914
+3        min   1.000000
+4        25%   1.000000
+5        50%   1.000000
+6        75%   1.000000
+7        max   6.000000
+demographic information for social class:
+  social class        stat
+0        count  100.000000
+1         mean    2.330000
+2          std    0.964575
+3          min    1.000000
+4          25%    1.750000
+5          50%    2.000000
+6          75%    3.000000
+7          max    4.000000
+demographic information for income:
+               income  count  percent
+0     50,000 - 59,999     23     0.23
+1     70,000 - 79,999     18     0.18
+2     40,000 - 49,999     15     0.15
+3     60,000 - 69,999     15     0.15
+4     30,000 - 39,999      8     0.08
+5   100,000 - 149,999      5     0.05
+6     90,000 - 99,999      4     0.04
+7     20,000 - 29,999      4     0.04
+8     80,000 - 89,999      4     0.04
+9    Less than 10,000      2     0.02
+10    10,000 - 19,999      1     0.01
+11  More than 150,000      1     0.01
+demographic information for ideology:
+       ideology  count  percent
+0       Liberal     69     0.69
+1  Conservative     14     0.14
+2  conservative     10     0.10
+3       Neutral      5     0.05
+4  Not reported      2     0.02
+demographic information for affiliation:
+    affiliation  count  percent
+0    Democratic     71     0.71
+1    Republican     18     0.18
+2    Indpendent      9     0.09
+3        Others      1     0.01
+4  Not Reported      1     0.01
+
+...creating sub samples & saving the datasets: gender (male vs. female), political affiliation (republican vs. democratic)...
+
+
+...main data analysis is conductd using the IAT open-source tool http://iatgen.org/...
+
+
+...running the post-host t-test to detect group difference in D-score...
+
+TEST 1: the difference between males and females (full sample) is 0.07 (t(98) = 0.926, p = 0.357, NOT statistically significant)
+
+
+TEST 2: the difference between males and females (sub-sample with participants who passed the exclusion criteria) is 0.0 (t(41) = 0.0, p = 1.0, NOT statistically significant)
+
+
+TEST 3: the difference between Republican and Democratic (full sample) is 0.35 (t(87) = 3.711, p < 0.001, statistically significant)
+
+
+TEST 4: the difference between Republican and Democratic (sub-sample with participants who passed the exclusion criteria) is 0.19 (t(32) = 1.864, p = 0.072, NOT statistically significant)
+
+
+:::THIS IS THE END!:::
+
+
+(base) jinyanxiang@MacBook-Pro inequality_poverty % 
