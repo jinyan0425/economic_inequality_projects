@@ -5,7 +5,7 @@
 2. [Project Description](#pd)
    1. [Inequality-Poverty Lay Associtation](#la)
    2. [Engagement in the Sharing Economy](#se)
-   3. [Interest in Higher Education](#he)
+   3. [Choices in Higher Education](#he)
    4. [References](#ref)
 3. [Author & License](#ALA)
 
