@@ -15,7 +15,7 @@
 This repo contains scripts, data, and results for several projects regarding economic inequality, including how it how it is (but possibly biasedly) associated with poverty (vs. affluence) in people's mind, how it affects consumers' engagement in the sharing economy, and how it affects choices in higher education.
 
 * Experimental designs can be found at the design folders. 
-* Results can be found at the result folders (in pickle files and pdfs. 
+* Results can be found at the result folders (in pickle files and pdfs). 
 * Shareable data can be found in the data folders. 
 
 If you request additional information, please contact me @ [jxiang5@vt.edu](jxiang5@vt.edu).
