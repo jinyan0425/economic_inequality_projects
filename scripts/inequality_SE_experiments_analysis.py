@@ -41,7 +41,7 @@ exp3a = experiment('E3a_inequality_SE_ride_mediation(explict).csv', 'E3a')
 exp3b = experiment('E3b_inequality_SE_ride_mediation(implict).csv', 'E3b')
 
 #EXPRIEMENT 4
-exp4 = experiment('E4_inequality_SE_lodge_moderation(cleaned).csv', 'E4')
+exp4 = experiment('E4_inequality_SE_lodge_moderation.csv', 'E4')
 
 
 def main():
