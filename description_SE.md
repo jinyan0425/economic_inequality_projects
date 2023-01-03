@@ -1,7 +1,6 @@
 ### Data Information
 * Archival ata can be downloaded on [Google drive](https://drive.google.com/drive/folders/1Y28XIQJmmVjROrPddpf78rF9-5Zcrs6B?usp=sharing). 
 * Experimental data are uploaded. 
-   *  Note that some studies are subject to futher replication and updated data will be uploaded and analyzed.
    *  Future deprecation warnings come with the pacakges installed (```pyprocessmacro```,```pingouin```) and will be fixed.
 
 ### Archival Data Processing & Analysis
