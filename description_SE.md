@@ -16,6 +16,5 @@
 ### Libraries
 * ```pandas```,```numpy```,
 * ```matplotlib```,```seaborn```,
-* ```sklearn```,```statsmodels```,```pyprocessmacro```,```pingouin```,
-* ```warnings```,```simple_colors```,```pickle```,```sys```,```os```
-* [```census_data_collection```](https://github.com/jinyan0425/census_collection)
+* ```sklearn```,```statsmodels```,```scipy```
+* ```censusdata```,```pytrends```
