@@ -3,31 +3,37 @@
 ## Table of Contents
 1. [General Description](#gd)
 2. [Project Description](#pd)
-   1. [Inequality-Poverty Lay Associtation](#la)
-   2. [Engagement in the Sharing Economy](#se)
-   3. [Choices in Higher Education](#he)
+   1. [Perception Bias](#la)
+   2. [Digital Discrimination in the Sharing Economy](#se)
+   3. [Education Decisions](#he)
    4. [References](#ref)
 3. [Author & License](#ALA)
 
 
 <a name="gd"></a>
 ## General Description
-This repo contains scripts, data, and results for several projects regarding economic inequality, including how it is (but possibly biasedly) associated with poverty (vs. affluence) in people's minds, how it affects consumers' engagement in the sharing economy, and how it affects choices in higher education. 
+This repository contains scripts for three projects studying different facets of economic inequality:
 
-Note that these data were used for the first draft and the final version of the manuscript could be different. The latest data will not be published until the manuscripts are published.
+1. <b> Perception Bias:</b> explore to what extent people associate rising economic inequality with an increase in poverty (vs. affluence)
 
-* Experimental designs can be found in the design folders. 
-* Results can be found in the result folders (in pickle files and pdfs. 
-* Shareable data can be found in the data folders. 
+2. <b> Digital Discrimination in Sharing Economy:</b> examine how economic inequality in one's region affects their access to peer-to-peer services
 
-If you request additional information, please contact me @ [jxiang5@vt.edu](jxiang5@vt.edu).
+3. <b> Education Decisions:</b> investigate how economic inequality in one's region affects their decision-making regarding higher education, including college decision (whether or not to attend college) and choice of major (which field to major in).
+
+Data are available upon request as the manuscripts are under review. If you request additional information, please contact me @ [jinyan.xiang0425@gmail.com](jinyan.xiang0425@gmail.com).
 
 <a name="pd"></a>
 ## Project Descriptions
 
 <a name="la"></a>
-### [Inequality-Poverty Lay Associtation](https://github.com/jinyan0425/inequality_related_projects/tree/inequality_poverty)
-This project explores how economic inequality is associated with poverty (vs. affluence) in a dynamic sense. <b> A survey with a national representative sample, a mixed-design experiment with the student sample, and an implicit association test (IAT) provide convergent evidence that people associate with poverty more strongly than with affluence </b>. Such perception of the impacts of economic inequality has been largely ignored in the literature, but <b> has a direct influence on people’s attitudes towards distribution and related social movements that are essential to addressing economic inequality and its negative consequences </b>. We speculate that availability heuristics (Tversky & Kahneman, 1974)(e.g., poverty is more salient, concrete, and recallable) and horns effect (Cook et al., 2003) account for the development of this lay association (e.g., more unequal societies are more likely to experience more socioeconomic issues including poverty).
+### [When People Talk About Income Inequality, What Are They Talking About? The Lay Understanding of Income Inequality](https://github.com/jinyan0425/inequality_related_projects/tree/inequality_poverty)
+While prior research extensively examines <b><i> how </b></i> people perceive the level of inequality, little has been known about<b><i> what </b></i> inequality means to them. 
+
+<b> A survey with a national representative sample, an controlled experiment and an implicit association test (IAT) provided convergent evidence that people associate income inequality more with poverty than with affluence. This constitutes a new form of misperception of income inequality </b> as, in reality, rising income inequality is more associated with an increase in the number of wealthy households rather than households living in poverty. 
+
+<b> These findings may help policymakers resolve the paradox between people's perception of unfair income distribution and their resistance to redistribution and promote public support for wealth-equalization interventions by correcting this biased lay understanding. </b> 
+
+In addition, we speculate that <b><i> availability heuristics (Tversky & Kahneman, 1974) </b></i> (e.g., poverty is more salient, concrete, and recallable) and <b><i>the negative halo effect (Cook et al., 2003) </b></i> (e.g., societies with higher income inequality are more likely to experience more socioeconomic issues including poverty) account for the development of this lay association.
 
 <a name="se"></a>
 ### [Engagement in the Sharing Economy](https://github.com/jinyan0425/inequality_related_projects/tree/sharing_economy)
