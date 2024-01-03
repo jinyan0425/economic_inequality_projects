@@ -60,8 +60,7 @@ def scaling(df, scaler):
                          'LoanDuration','Log_LoanDuration',
                          'LoanOriginalAmount','Investors']]
     df_no_scaling = df[['AveInvestment','Log_AveInvestment',
-                        'ListingYear','ListingMonth','BorrowerState',
-                        'AmountCategory_1k','AmountCategory_1_5k','AmountCategory_2k']]
+                        'ListingYear','ListingMonth','BorrowerState']]
     
     scaler_norm = scaler()
     scaled_data = scaler_norm.fit_transform(df_for_scaling)
@@ -123,26 +122,10 @@ def data_wo_extereme_outliers(var, percentile_low,percentile_high, df):
     df_wo_extreme_outliers = df[(df[var] > percentile_low)&(df[var] < percentile_high)]
     
     return df_wo_extreme_outliers
-
-
-#RUN OLS LINEAR MODEL
-def ols_reg(df, model, cov_type):
-    '''
-    Parameters
-    ----------
-    df: DATAFRAME, the dataframe for running the model
-    model: STRING, the model to be estimated
-    cov_type: STRING, covariance estimators, options: HC0, HC1, HC2, HC3, 'nonrobust' (default)
-    
-    Returns
-    -------
-    FITTED OLS MODEL
-    '''
-    ols_model = ols(model, data = df).fit(cov_type = cov_type) 
-    return ols_model
    
  
-#RUN ROBUST LINEAR MODEL
+#RUN ROBUST LINEAR MODEL 
+## RLM was employed to address the potential issues related to heteroscedasticity and outliers stemming from the non-normal distribution of logarithmic average lending amount
 def rlm_reg(df, model, m_estimation, cov_type):
     '''
     Parameters
@@ -163,6 +146,7 @@ def rlm_reg(df, model, m_estimation, cov_type):
 
 
 #RUN QUANTILE REGRESSION
+## quantitle regression was employed as a robustness check as it is robust to non-normal distributions
 def quant_reg(df, model, quantile):
     '''
     Parameters
@@ -246,120 +230,55 @@ def main():
         print(blue('...Saving histogram of the average lending amount(raw and log transformed)...\n',['bold']))
         get_distribution('AveInvestment','Average Lending Amount',True, False,0,df)
         get_distribution('Log_AveInvestment','Average Lending Amount(log transformed)',True, False,0, df)
+     
+        #define the model
+        focal_model = 'Log_AveInvestment ~ Gini_1y_est + Income_1y_est + poverty_rate + ProsperScore + EstimatedReturn + Log_LoanDuration + Gini_1y_est*ProsperScore + Gini_1y_est*EstimatedReturn + C(ListingMonth) + C(BorrowerState)'
+   
         
-        print(blue('...Saving histogram of the focal predictor -- gini...\n',['bold']))
-        get_distribution('Gini_1y_est','Gini index (1-year estimate)',True,False,0,df)
+        print(red('The regression model is {}...\n'.format(focal_model),['bold']))
         
-        print(blue('...Saving distribution of the focal moderator -- prosper score...\n',['bold']))
-        get_distribution('ProsperScore','Prosper Score',False, True, 0,df)
         
-        print(blue('...Saving distribution of other predictors -- estimated return & loan duration (raw and log transformed..\n',['bold']))
-        get_distribution('EstimatedReturn','Estimated Return', True, False,0, df)
-        get_distribution('LoanDuration','Loan Duration', True, False,0,df)
-        get_distribution('Log_LoanDuration','Loan Duration (log transformed)', True, False,0,df)
+        print(red('\n...Running the fixed-effect RLM model with scaled data with non-scaled data for concrete interpretation (HuberT weight function, H1 heteroscedasticity robust covariance) and saving the model...\n',['bold']))
+        m_rlm = rlm_reg(df, focal_model, HuberT, 'H1')
+        #save_model(m_rlm,'rlm_non_scaled.pkl')
+        print(m_rlm.summary())
+
         
-        print(blue('...Saving distribution of the fixed effect factors...\n',['bold']))
-        get_distribution('ListingYear', 'Listing Year',False, True, 0,df)
-        get_distribution('BorrowerState', 'Borrower State',False, True,90,df)
+        print(red('\n...Running the fixed-effect RLM model with scaled data (HuberT weight function, H1 heteroscedasticity robust covariance) and saving the model...\n',['bold']))
+        m_rlm_scaled = rlm_reg(df_scaled, focal_model, HuberT, 'H1')
+        #save_model(m_rlm_scaled,'rlm_scaled.pkl')
+        print(m_rlm_scaled.summary())
         
-        get_distribution('AmountCategory_1k','Amount Category_1k', False, True, 0, df)
-        get_distribution('AmountCategory_1_5k','Amount Category_1_5k', False, True, 0, df)
-        get_distribution('AmountCategory_2k','Amount Category_2k', False, True, 0, df)
+        print(red('\n...Running the Quantile Regression with non-scaled data (q = 0.5) and saving the model...\n',['bold']))
+        m_quant = quant_reg(df, focal_model, 0.5)
+        #save_model(m_quant,'quantile_non_scaled.pkl')
+        print(m_quant.summary())
+
+        print(red('\n...Running the Quantile Regression with non-scaled data (q = 0.5) and saving the model...\n',['bold']))
+        m_quant_scaled = quant_reg(df_scaled, focal_model, 0.5)
+        #save_model(m_quant_scaled,'quantile_scaled.pkl')
+        print(m_quant_scaled.summary())
         
-        #using 1y-est Gini and income
-        focal_model = 'Log_AveInvestment ~ Gini_1y_est*ProsperScore + Income_1y_est + Gini_1y_est*EstimatedReturn + Log_LoanDuration + C(ListingMonth) + C(BorrowerState) + Gini_1y_est*C(AmountCategory_1k)'
-        #using 5y-est Gini and income for robustness check
-        auxiliary_model = 'Log_AveInvestment ~ Gini_5y_est*ProsperScore + Income_5y_est + Gini_5y_est*EstimatedReturn + Log_LoanDuration + C(ListingMonth) + C(BorrowerState) + Gini_5y_est*C(AmountCategory_1k)'
-        #using fixed year effect for robustness check
-        auxiliary_model2 = 'Log_AveInvestment ~ Gini_1y_est*ProsperScore + Income_1y_est + Gini_1y_est*EstimatedReturn + Log_LoanDuration + C(ListingYear) + C(BorrowerState) + Gini_1y_est*C(AmountCategory_1k)'
-        #using 1.5k as the cutoff point for 'Amount_Category'
-        auxiliary_model3 = 'Log_AveInvestment ~ Gini_1y_est*ProsperScore + Income_1y_est + Gini_1y_est*EstimatedReturn + Log_LoanDuration + C(ListingMonth) + C(BorrowerState) + Gini_1y_est*C(AmountCategory_1_5k)'
-        #using 2k as the cutoff point for 'Amount_Category'
-        auxiliary_model4 = 'Log_AveInvestment ~ Gini_1y_est*ProsperScore + Income_1y_est + Gini_1y_est*EstimatedReturn + Log_LoanDuration + C(ListingMonth) + C(BorrowerState) + Gini_1y_est*C(AmountCategory_2k)'
-        
-        print(red('The focal model is {}...\n'.format(focal_model),['bold']))
-        print(red('The first auxiliary model that uses 5 (vs. 1) year estimated Gini and Income is {}\n'.format(auxiliary_model),['bold']))
-        print(red('The second auxiliary model that controls for fixed year (vs. month) effect is {}\n'.format(auxiliary_model2),['bold']))
-        print(red('The third auxiliary model that uses 1.5k (vs. 1k) as the cutoff point for small-large lending amount category is {}\n'.format(auxiliary_model3),['bold']))
-        print(red('The third auxiliary model that uses 2k (vs. 1k) as the cutoff point for small-large lending amount category is {}\n'.format(auxiliary_model4),['bold']))
-        
-      
-        print(red('\n...Running the focal OLS model with fixed month & state effects (1y-est gini/income, HC3 heteroscedasticity robust covariance) and saving the model...\n',['bold']))
-        print('for OLS models, use HC3 heteroscedasticity robust covariance to address heteroscedasticity \n')
-        m_ols_focal = ols_reg(df_scaled, focal_model, 'HC3')
-        #save_model(m_ols_focal,'ols_focal_month_state_full.pkl')
-        print(m_ols_focal.summary())
-        
-        print(red('\n...Running the focal RLM model with fixed month & state effects (1y-est gini/income, HuberT weight function, H1 heteroscedasticity robust covariance) and saving the model...\n',['bold']))
-        m_rlm_focal1 = rlm_reg(df_scaled, focal_model, HuberT, 'H1')
-        #save_model(m_rlm_focal1,'rlm_focal_month_state_full(HuberT).pkl')
-        print(m_rlm_focal1.summary())
-        
-        print(red('\n...Running the focal RLM model with fixed month & state effects (1y, AndrewWave, weight function, H1) and saving the model...\n',['bold']))
-        m_rlm_focal2 = rlm_reg(df_scaled, focal_model, AndrewWave, 'H1')
-        #save_model(m_rlm_focal2,'rlm_focal_month_state_full(AndrewWave).pkl')
-        print(m_rlm_focal2.summary())
-        
-        print(red('\n...Running the focal Quantile Regression model with fixed month & state effects (1y, q = 0.5) and saving the model...\n',['bold']))
-        m_quant_focal = quant_reg(df_scaled, focal_model, 0.5)
-        #save_model(m_quant_focal,'quantile_focal_month_state_full(median).pkl')
-        print(m_quant_focal.summary())
-        
-        print(red('\n...Running the auxiliary OLS model with fixed month & state effects (5y-est gini/income, HC3) and saving the model...\n',['bold']))
-        m_ols_auxiliary = ols_reg(df_scaled, auxiliary_model, 'HC3')
-        #save_model(m_ols_auxiliary,'ols_auxiliary_month_state_full (5y).pkl')
-        print(m_ols_auxiliary.summary())
-        
-        print(red('\n...Running the auxiliary RLM model with fixed month & state effects (5y, HuberT, H1) and saving the model...\n',['bold']))
-        m_rlm_auxiliary = rlm_reg(df_scaled, auxiliary_model, HuberT, 'H1')
-        #save_model(m_rlm_auxiliary,'rlm_auxiliary_month_state_full(HuberT, 5y).pkl')
-        print(m_rlm_auxiliary.summary())
-        
-        print(red('\n...Running the auxiliary Quantile Regression model with fixed month & state effects (5y, q = 0.5) and saving the model...\n',['bold']))
-        m_quant_auxiliary = quant_reg(df_scaled, auxiliary_model, 0.5)
-        #save_model(m_quant_auxiliary,'quantile_auxiliary_month_state_full (median, 5y).pkl')
-        print(m_quant_auxiliary.summary())
-        
-        print(red('\n...Running the auxiliary RLM model with fixed year & state effects (1y, HuberT, H1) and saving the model...\n',['bold']))
-        m_rlm_auxiliary2 = rlm_reg(df_scaled, auxiliary_model2, HuberT,'H1')
-        #save_model(m_rlm_auxiliary2,'ols_auxiliary_year_state_full (HuberT).pkl')
-        print(m_rlm_auxiliary2.summary())
         
         print(blue('...Dropping the extreme outliers (the top and bottom 1%)...\n',['bold']))
         df_scaled2 = data_wo_extereme_outliers('Log_AveInvestment', 1, 99, df_scaled)
         
-        print(red('\n...Running the auxiliary OLS model with fixed month & state effects (1y, HC3, excluding outliers) and saving the model...\n',['bold']))
-        m_ols_auxiliary2 = ols_reg(df_scaled2, focal_model, 'HC3')
-        #save_model(m_ols_auxiliary2,'ols_auxiliary_month_state_wo_extreme_outliers.pkl')
-        print(m_ols_auxiliary2.summary())
+        print(red('\n...Running the RLM model with extreme-outlier-excluded non-scaled data (1y, HuberT, H1) and saving the model...\n',['bold']))
+        m_rlm_no_outlier = rlm_reg(df, focal_model, HuberT, 'H1')
+        #save_model(m_rlm_no_outlier,'rlm_no_outlier.pkl')
+        print(m_rlm_no_outlier.summary())
         
-        print(red('\n...Running the auxiliary RLM model with fixed month & state effects (1y, HuberT, H1, 1.5k as the amount category cutoff point) and saving the model...\n',['bold']))
-        m_rlm_auxiliary3 = rlm_reg(df_scaled, auxiliary_model3, HuberT, 'H1')
-        #save_model(m_rlm_auxiliary3,'rlm_auxiliary_month_state_full(1.5k_cutoff).pkl')
-        print(m_rlm_auxiliary3.summary())
-        
-        print(red('\n...Running the auxiliary RLM model with fixed month & state effects (1y, HuberT, H1, 2k) and saving the model...\n',['bold']))
-        m_rlm_auxiliary4 = rlm_reg(df_scaled, auxiliary_model4, HuberT, 'H1')
-        #save_model(m_rlm_auxiliary4,'rlm_auxiliary_month_state_full(1.5k_cutoff).pkl')
-        print(m_rlm_auxiliary4.summary())
-        
-        print(red('\n...Running the auxiliary Quantile Regression model with fixed month & state effects (1y, q = 0.5, 1.5k) and saving the model...\n',['bold']))
-        m_quant_auxiliary2 = quant_reg(df_scaled, auxiliary_model3, 0.5)
-        #save_model(m_quant_auxiliary2,'quantile_auxiliary_month_state_full(1.5k_cutoff).pkl')
-        print(m_quant_auxiliary2.summary())
-        
-        print(red('\n...Running the auxiliary Quantile Regression model with fixed month & state effects (1y, q = 0.5, 2k) and saving the model...\n',['bold']))
-        m_quant_auxiliary3 = quant_reg(df_scaled, auxiliary_model4, 0.5)
-        #save_model(m_quant_auxiliary3,'quantile_auxiliary_month_state_full(2k_cutoff).pkl')
-        print(m_quant_auxiliary3.summary())
-        
-        
+        print(red('\n...Running the  Quantile Regression model with extreme-outlier-excluded non-scaled data and saving the model...\n',['bold']))
+        m_quant_no_outlier = quant_reg(m_quant_no_outlier, focal_model, 0.5)
+        #save_model(m_quant_no_outlier,'quantile_no_outlier.pkl')
+        print(m_quant_no_outlier.summary())
+
+
         print(blue('\n...Saving the focal RLM model: {}'.format(model_filepath),['bold']))
-        save_model(m_rlm_focal1, model_filepath)
+        save_model(m_rlm, model_filepath)
         
         print(blue('...Checking the residuals and homoscedasticity of the baseline model...\n',['bold']))
-        check_residuals(m_rlm_focal1, 'RLM model with fixed month & state effect (Huber T Norm, H1 Cov)')
-        
+        check_residuals(m_rlm, 'RLM model with fixed month & state effect (Huber T Norm, H1 Cov)')
         
         print(red('Printing the focal RLM model \n'\
               'with fixed month and state effects\n'
@@ -367,10 +286,7 @@ def main():
               'and H1 covariance estimator to address the heteroscedasticity issue \n'\
               'and Huber T norm to address outlier issue\n',['bold']))
         
-        print(m_rlm_focal1.summary())
-        
-        
-    
+        print(m_rlm.summary())
 
         print(red('Focal RLM model with fixed month and state effects (Huber T Norm, H1 Cov) saved!',['bold']))
 
@@ -379,7 +295,7 @@ def main():
         print('Please provide the file path of the master dataframe'\
               'as the first argument and the file path of the pickle files to '\
               'save the model to as the second argument. \n\nExample: python3 '\
-              'inequality_SE_archival_data_analysis.py df_SE_master.csv focal_rlm_fixed_month_state_model.pkl')
+              'inequality_SE_archival_data_analysis.py df_SE_master.csv focal_rlm_model.pkl')
 
 
 if __name__ == '__main__':
