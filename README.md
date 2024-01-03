@@ -48,7 +48,7 @@ This research explores how economic inequality in a consumer's region affects th
 These findings thus underscore the needs for further efforts to be undertaken to combat digital discrimination in P2P services. <b> A viable alternative, suggested by our findings, is to implement a similarity-based matching algorithm. </b> Rather than relying solely on preference features and booking history (Guo et al., 2018), the algorithm can also integrate self-disclosed information from both providers and users as an additional feature to calculate the similarity score and facilitate matching. It may be aslo beneficial to explicitly <b> display the similarity score to providers when they receive service inquires or requests.</b> This display can increase the salience of interpersonal similarities between themselves and the potential consumer, diverting their attention from other bias-susceptible characteristics of the consumer.
 
 <a name="he"></a> 
-### Education Decision
+### [Education Decision](https://github.com/jinyan0425/economic_inequality_projects/tree/education_decision)
 #### <i> Economic Inequality Shapes Individuals' Education Decisions </i>
 We investigate how economic inequality in one’s society shapes their education decisions. <b> Leveraging state-level Google Search data, county-level Census data, and individual-level experimental data, we find that as economic inequality rises, individuals become more willing to pursue a college education </b> because they perceive a wider income gap between well-educated individuals and those with lower levels of education (i.e., <b><i>heightened perceived education premium of college </b></i>). 
 
