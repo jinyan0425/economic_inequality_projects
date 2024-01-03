@@ -15,4 +15,9 @@
 * [NCES_major_data.ipynb](https://github.com/jinyan0425/inequality_related_projects/tree/major_visualization/NCES_major_data.ipynb) for data collection, wrangling, and visualization (source: NCES)
 
 ### Experimental Data Analysis
-* Experiments are analyzed using SPSS, and the syntax can be accessed through [OSF folder](https://osf.io/f9rhq/) (S2, S4, and S5 sub-folders). 
+* Experiments are analyzed using SPSS, and the syntax can be accessed through [OSF folder](https://osf.io/f9rhq/) (S2, S4, and S5 sub-folders).
+
+### Libraries
+* pandas,numpy,
+* matplotlib,seaborn,
+* scipy, statsmodels, pingouin
