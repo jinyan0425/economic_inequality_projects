@@ -225,25 +225,30 @@ def main():
         print(blue('\n...Scaling the data with min-max normalization... and saving the scaled dataset...\n',['bold']))
         df_scaled = scaling(df, MinMaxScaler)
         df_scaled.to_csv('df_SE_master_scaled.csv')
+
         
-        
+        #get distributions
         print(blue('...Saving histogram of the average lending amount(raw and log transformed)...\n',['bold']))
         get_distribution('AveInvestment','Average Lending Amount',True, False,0,df)
         get_distribution('Log_AveInvestment','Average Lending Amount(log transformed)',True, False,0, df)
+
+        print(blue('...Saving histogram of loan duration (raw and log transformed)...\n',['bold']))
+        get_distribution('LoanDuration','Loan Duration',True, False,0,df)
+        get_distribution('Log_LoanDuration','Loan Duration(log transformed)',True, False,0, df)
+        
      
         #define the model
         focal_model = 'Log_AveInvestment ~ Gini_1y_est + Income_1y_est + poverty_rate + ProsperScore + EstimatedReturn + Log_LoanDuration + Gini_1y_est*ProsperScore + Gini_1y_est*EstimatedReturn + C(ListingMonth) + C(BorrowerState)'
-   
         
         print(red('The regression model is {}...\n'.format(focal_model),['bold']))
+
         
-        
+        #run the models
         print(red('\n...Running the fixed-effect RLM model with scaled data with non-scaled data for concrete interpretation (HuberT weight function, H1 heteroscedasticity robust covariance) and saving the model...\n',['bold']))
         m_rlm = rlm_reg(df, focal_model, HuberT, 'H1')
         #save_model(m_rlm,'rlm_non_scaled.pkl')
         print(m_rlm.summary())
 
-        
         print(red('\n...Running the fixed-effect RLM model with scaled data (HuberT weight function, H1 heteroscedasticity robust covariance) and saving the model...\n',['bold']))
         m_rlm_scaled = rlm_reg(df_scaled, focal_model, HuberT, 'H1')
         #save_model(m_rlm_scaled,'rlm_scaled.pkl')
@@ -259,7 +264,7 @@ def main():
         #save_model(m_quant_scaled,'quantile_scaled.pkl')
         print(m_quant_scaled.summary())
         
-        
+        ##drop the outliers
         print(blue('...Dropping the extreme outliers (the top and bottom 1%)...\n',['bold']))
         df_scaled2 = data_wo_extereme_outliers('Log_AveInvestment', 1, 99, df_scaled)
         
@@ -273,7 +278,8 @@ def main():
         #save_model(m_quant_no_outlier,'quantile_no_outlier.pkl')
         print(m_quant_no_outlier.summary())
 
-
+        
+        #save the focal model
         print(blue('\n...Saving the focal RLM model: {}'.format(model_filepath),['bold']))
         save_model(m_rlm, model_filepath)
         
