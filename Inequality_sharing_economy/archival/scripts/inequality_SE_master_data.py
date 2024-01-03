@@ -39,7 +39,7 @@ def collect_ACS_data(year_range):
     SE_geo = 'state: *' #please note that any space between state and ":" could cause errors
     SE_var_dict = {'B19083_001E':'Gini','B19013_001E':'Income'}
     
-    api_key = "2ce6be4a8f71a52336616ae611a7979c33880c8b"
+    api_key = "YOUR API KEY"
     
     SE_ACS_1y = ACS_data(1, SE_var_dict, SE_geo, api_key)
     SE_ACS_5y = ACS_data(5, SE_var_dict, SE_geo, api_key)
