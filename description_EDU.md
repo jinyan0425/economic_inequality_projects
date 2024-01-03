@@ -2,7 +2,7 @@
 * Data are available upon request.
 
 ### Google Trends Data on Search Interest in Higher-education-related Terms (state-level)
-* [GoogleTrends_data.ipynb](https://github.com/jinyan0425/inequality_related_projects/tree/google_trends/GoogleTrends.ipynb) for data collection, wrangling, analysis and virsualization
+* [GoogleTrends.ipynb](https://github.com/jinyan0425/inequality_related_projects/tree/google_trends/GoogleTrends.ipynb) for data collection, wrangling, analysis and virsualization
 
 ### US Census data on Education Attainment and School Enrollment (county-level)
 * [ACS_edu_data.ipynb](https://github.com/jinyan0425/inequality_related_projects/tree/census_acs/ACS_edu_data.ipynb) for data collection and wrangling
