@@ -67,12 +67,11 @@ m.glm.robust <- function(model){
 
 
 
-#Auxiliary analysis: fit a Generalized Least Square model
+#Auxiliary analysis: fit a Ordinary Least Square model
 ##this will ignore the bounded nature of the DV
-m.gls <- function(data, response_variable) {
+m.lm <- function(data, response_variable) {
   formula <- as.formula(paste(response_variable, "~ gini + log10_income + population + unemployment + factor(Year) + State"))
-  model <- gls(formula, correlation = corSymm(form = ~ 1 | GEO_ID), na.action = na.omit,
-               data = data) #general correlation structure is used
+  model <- lm(formula, data = data) #general correlation structure is used
   model_summary <- summary(model)
 
   return(list(model = model, summary = model_summary))
@@ -80,7 +79,7 @@ m.gls <- function(data, response_variable) {
 
 
 
-#Conduct sensitivity analysis using point estimate
+#Conduct sensitivity analysis using point estimate (for OLS only)
 sensitivity <- function(gini_beta, gini_se, gini_dof, description) {
   point.estimate <- sensemakr(gini_beta, gini_se, gini_dof)
   message <- paste("Data, Model, Variable:", description)
@@ -136,28 +135,22 @@ glm.attain_ba_higher_18_24 <- m.glm(df_attain_1y, "ba_higher_18_24D")
 glm.robust.attain_ba_higher_18_24 <-m.glm.robust(glm.attain_ba_higher_18_24$model)
 ####GML model with clustered sd
 glm.cluster.attain_ba_higher_18_24 <- m.glm.cluster(df_attain_1y, "ba_higher_18_24D")
-####GLS model
-gls.attain_ba_higher_18_24 <- m.gls(df_attain_1y, "ba_higher_18_24D")
+####OLS model
+lm.attain_ba_higher_18_24 <- m.lm(df_attain_1y, "ba_higher_18_24D")
 
 ###Get model summary
 glm.attain_ba_higher_18_24$summary
 glm.robust.attain_ba_higher_18_24
 glm.cluster.attain_ba_higher_18_24$summary
-gls.attain_ba_higher_18_24$summary
+lm.attain_ba_higher_18_24$summary
 
-###Get sensitivity analysis
-sens.glm.attain_ba_higher_18_24 <- sensitivity(7.447, 0.3709, 8122,
-                                               "One-year Estimated Education Attainment, GLM, Bachelor's or higher for population aged between 18 and 24")
-sens.glm.robust.attain_ba_higher_18_24 <- sensitivity(7.447, 0.1987, 8122,
-                                                      "One-year Estimated Education Attainment, GLM-robust std, Bachelor's or higher for population aged between 18 and 24")
-sens.glm.cluster.attain_ba_higher_18_24 <- sensitivity(7.447, 0.4832, 8122,
-                                                       "One-year Estimated Education Attainment, GLM-clustered std, Bachelor's or higher for population aged between 18 and 24")
-sens.gls.attain_ba_higher_18_24 <- sensitivity(0.587, 0.0310, 8122,
-                                               "One-year Estimated Education Attainment, GLS std, Bachelor's or higher for population aged between 18 and 24")
+###Get sensitivity analysis for OLS only
+sens.lm.attain_ba_higher_18_24 <- sensitivity(0.74, 0.016, 8122,
+                                               "One-year Estimated Education Attainment, OLS, Bachelor's or higher for population aged between 18 and 24")
 
 ##Compare actual vs. predicted value
 compare.predicted.values(df_attain_1y, "ba_higher_18_24D",
-                         glm.attain_ba_higher_18_24$model, glm.cluster.attain_ba_higher_18_24$model, gls.attain_ba_higher_18_24$model)
+                         glm.attain_ba_higher_18_24$model, glm.cluster.attain_ba_higher_18_24$model, lm.attain_ba_higher_18_24$model)
 
 
 ##Attainment: ba & higher, 25-34y
@@ -168,28 +161,22 @@ glm.attain_ba_higher_25_34 <- m.glm(df_attain_1y, "ba_higher_25_34D")
 glm.robust.attain_ba_higher_25_34 <-m.glm.robust(glm.attain_ba_higher_25_34$model)
 ####GML model with clustered sd
 glm.cluster.attain_ba_higher_25_34 <- m.glm.cluster(df_attain_1y, "ba_higher_25_34D")
-####GLS model
-gls.attain_ba_higher_25_34 <- m.gls(df_attain_1y, "ba_higher_25_34D")
+####OLS model
+lm.attain_ba_higher_25_34 <- m.lm(df_attain_1y, "ba_higher_25_34D")
 
 ###Get model summary
 glm.attain_ba_higher_25_34$summary
 glm.robust.attain_ba_higher_25_34
 glm.cluster.attain_ba_higher_25_34$summary
-gls.attain_ba_higher_25_34$summary
+lm.attain_ba_higher_25_34$summary
 
 ###Get sensitivity analysis
-sens.glm.attain_ba_higher_25_34 <- sensitivity(9.202, 0.3137, 8122,
-                                               "One-year Estimated Education Attainment, GLM, Bachelor's or higher for population aged between 25 and 34")
-sens.glm.robust.attain_ba_higher_25_34 <- sensitivity(9.202, 0.1987, 8122,
-                                                      "One-year Estimated Education Attainment, GLM-robust std, Bachelor's or higher for population aged between 25 and 34")
-sens.glm.cluster.attain_ba_higher_25_34 <- sensitivity(9.202, 0.5580, 8122,
-                                                       "One-year Estimated Education Attainment, GLM-clustered std, Bachelor's or higher for population aged between 25 and 34")
-sens.gls.attain_ba_higher_25_34 <- sensitivity(0.886, 0.0609, 8122,
-                                               "One-year Estimated Education Attainment, GLS std, Bachelor's or higher for population aged between 25 and 34")
+sens.lm.attain_ba_higher_25_34 <- sensitivity(0.83, 0.012, 8122,
+                                               "One-year Estimated Education Attainment, OLS, Bachelor's or higher for population aged between 25 and 34")
 
 ##Compare actual vs. predicted value
 compare.predicted.values(df_attain_1y, "ba_higher_25_34D",
-                         glm.attain_ba_higher_25_34$model, glm.cluster.attain_ba_higher_25_34$model, gls.attain_ba_higher_25_34$model)
+                         lm.attain_ba_higher_25_34$model, glm.cluster.attain_ba_higher_25_34$model, lm.attain_ba_higher_25_34$model)
 
 
 ##Attainment: ba, 25plus
@@ -200,28 +187,22 @@ glm.attain_ba_25plus <- m.glm(df_attain_1y, "ba_higher_25_plusD")
 glm.robust.attain_ba_25plus <-m.glm.robust(glm.attain_ba_25plus$model)
 ####GML model with clustered sd
 glm.cluster.attain_ba_25plus <- m.glm.cluster(df_attain_1y, "ba_higher_25_plusD")
-####GLS model
-gls.attain_ba_25plus <- m.gls(df_attain_1y, "ba_higher_25_plusD")
+####OLS model
+lm.attain_ba_25plus <- m.lm(df_attain_1y, "ba_higher_25_plusD")
 
 ###Get model summary
 glm.attain_ba_25plus$summary
 glm.robust.attain_ba_25plus
 glm.cluster.attain_ba_25plus$summary
-gls.attain_ba_25plus$summary
+lm.attain_ba_25plus$summary
 
 ###Get sensitivity analysis
-sens.glm.attain_ba_25plus <- sensitivity(8.612, .0990, 8122,
-                                               "One-year Estimated Education Attainment, GLM, Bachelor's for population aged over 25")
-sens.glm.robust.attain_ba_25plus <- sensitivity(8.612, 0.1335, 8122,
-                                                      "One-year Estimated Education Attainment, GLM-robust std, Bachelor's for population aged over 25")
-sens.glm.cluster.attain_ba_25plus <- sensitivity(8.612, 0.3992, 8122,
-                                                       "One-year Estimated Education Attainment, GLM-clustered std, Bachelor's for population aged over 25")
-sens.gls.attain_ba_25plus <- sensitivity(0.341,  0.0309, 8122,
-                                               "One-year Estimated Education Attainment, GLS std, Bachelor's for population aged over 25")
+sens.lm.attain_ba_25plus <- sensitivity(0.49, 0.0045, 8122,
+                                               "One-year Estimated Education Attainment, OLS, Bachelor's for population aged over 25")
 
 ##Compare actual vs. predicted value
 compare.predicted.values(df_attain_1y, "ba_higher_25_34D",
-                         glm.attain_ba_25plus$model, glm.cluster.attain_ba_25plus$model, gls.attain_ba_25plus$model)
+                         glm.attain_ba_25plus$model, glm.cluster.attain_ba_25plus$model, lm.attain_ba_25plus$model)
 
 
 ##Attainment: graduate or professional, 25plus
@@ -232,28 +213,22 @@ glm.attain_grad_prof_25plus <- m.glm(df_attain_1y, "grad_prof_25_plusD")
 glm.robust.attain_grad_prof_25plus <-m.glm.robust(glm.attain_grad_prof_25plus$model)
 ####GML model with clustered sd
 glm.cluster.attain_grad_prof_25plus <- m.glm.cluster(df_attain_1y, "grad_prof_25_plusD")
-####GLS model
-gls.attain_grad_prof_25plus <- m.gls(df_attain_1y, "grad_prof_25_plusD")
+####OLS model
+lm.attain_grad_prof_25plus <- m.gls(df_attain_1y, "grad_prof_25_plusD")
 
 ###Get model summary
 glm.attain_grad_prof_25plus$summary
 glm.robust.attain_grad_prof_25plus
 glm.cluster.attain_grad_prof_25plus$summary
-gls.attain_grad_prof_25plus$summary
+lm.attain_grad_prof_25plus$summary
 
 ###Get sensitivity analysis
-sens.glm.attain_ba_25plus <- sensitivity(8.717, 0.0106, 8122,
-                                         "One-year Estimated Education Attainment, GLM, Graduate or Professional for population aged over 25")
-sens.glm.robust.attain_ba_25plus <- sensitivity(8.717, 0.1775, 8122,
-                                                "One-year Estimated Education Attainment, GLM-robust std, Graduate or Professional for population aged over 25")
-sens.glm.cluster.attain_ba_25plus <- sensitivity(8.612, 0.5268, 8122,
-                                                 "One-year Estimated Education Attainment, GLM-clustered std, Graduate or Professional for population aged over 25")
-sens.gls.attain_ba_25plus <- sensitivity(0.249,  0.0193, 8122,
-                                         "One-year Estimated Education Attainment, GLS std, Graduate or Professional for population aged over 25")
+sens.lm.attain_grad_prof_25plus <- sensitivity(0.98, 0.012, 8122,
+                                         "One-year Estimated Education Attainment, OLS, Graduate or Professional for population aged over 25")
 
 ##Compare actual vs. predicted value
 compare.predicted.values(df_attain_1y, "ba_higher_25_34D",
-                         glm.attain_grad_prof_25plus$model, glm.cluster.attain_grad_prof_25plus$model, gls.attain_grad_prof_25plus$model)
+                         glm.attain_grad_prof_25plus$model, glm.cluster.attain_grad_prof_25plus$model, lm.attain_grad_prof_25plus$model)
 
 ##Enrollment: college & graduate, 18-24y
 ###Fit the model
@@ -263,31 +238,24 @@ glm.enroll_college_grad_18_24 <- m.glm(df_enroll_1y, "college_grad_18_24D")
 glm.robust.enroll_college_grad_18_24 <-m.glm.robust(glm.enroll_college_grad_18_24$model)
 ####GML model with clustered sd
 glm.cluster.enroll_college_grad_18_24 <- m.glm.cluster(df_enroll_1y, "college_grad_18_24D")
-####GLS model
-gls.enroll_college_grad_18_24 <- m.gls(df_enroll_1y, "college_grad_18_24D")
+####OLS model
+lm.enroll_college_grad_18_24 <- m.gls(df_enroll_1y, "college_grad_18_24D")
 
 
 ###Get model summary
 glm.enroll_college_grad_18_24$summary
 glm.robust.enroll_college_grad_18_24
 glm.cluster.enroll_college_grad_18_24$summary
-gls.enroll_college_grad_18_24$summary
+lm.enroll_college_grad_18_24$summary
 
 ###Get sensitivity analysis
-sens.glm.enroll_college_grad_18_24 <- sensitivity(7.970, 0.2142, 7776,
-                                               "One-year Estimated School Enrollment, GLM, College or graduate school enrollment for population aged between 18 and 24")
-sens.glm.robust.enroll_college_grad_18_24 <- sensitivity(7.970, 0.2603, 7776,
-                                                      "One-year Estimated School Enrollment, GLM-robust std, College or graduate school enrollment for population aged between 18 and 24")
-sens.glm.cluster.enroll_college_grad_18_24 <- sensitivity(7.970, 0.7361, 7776,
-                                                       "One-year Estimated School Enrollment, GLM-clustered std, College or graduate school enrollment for population aged between 18 and 24")
-sens.gls.enroll_college_grad_18_24 <- sensitivity(0.4847, 0.0856, 7776,
-                                               "One-year Estimated School Enrollment, GLS std, College or graduate school enrollment for population for population aged between 18 and 24")
+sens.lm.enroll_college_grad_18_24 <- sensitivity(1.91, 0.05, 7776,
+                                               "One-year Estimated School Enrollment, OLS, College or graduate school enrollment for population for population aged between 18 and 24")
 
 ##Compare actual vs. predicted value
 compare.predicted.values(df_enroll_1y, "college_grad_18_24D",
-                         glm.enroll_college_grad_18_24$model, glm.cluster.enroll_college_grad_18_24$model, gls.enroll_college_grad_18_24$model)
+                         glm.enroll_college_grad_18_24$model, glm.cluster.enroll_college_grad_18_24$model, lm.enroll_college_grad_18_24$model)
 
-df_enroll_1y[["college_grad_18_24D"]]
 
 ##Enrollment: college, 3years plus
 ###Fit the model
@@ -297,28 +265,22 @@ glm.enroll_college_3plus <- m.glm(df_enroll_1y, "college_3_plusD")
 glm.robust.enroll_college_3plus<-m.glm.robust(glm.enroll_college_3plus$model)
 ####GML model with clustered sd
 glm.cluster.enroll_college_3plus <- m.glm.cluster(df_enroll_1y, "college_3_plusD")
-####GLS model
-gls.enroll_college_3plus <- m.gls(df_enroll_1y, "college_3_plusD")
+####OLS model
+lm.enroll_college_3plus <- m.gls(df_enroll_1y, "college_3_plusD")
 
 ###Get model summary
 glm.enroll_college_3plus$summary
 glm.enroll_college_3plus$summary
 glm.robust.enroll_college_3plus
-gls.enroll_college_3plus$summary
+lm.enroll_college_3plus$summary
 
 ###Get sensitivity analysis
-sens.glm.enroll_college_3plus <- sensitivity(5.678, 0.1726, 7776,
-                                                  "One-year Estimated School Enrollment, GLM, College enrollment for population over 3 years")
-sens.glm.robust.enroll_college_3plus <- sensitivity(7.970, 0.2047, 7776,
-                                                         "One-year Estimated School Enrollment, GLM-robust std, College enrollment for population over 3 years")
-sens.glm.cluster.enroll_college_3plus <- sensitivity(7.970, 0.5873, 7776,
-                                                          "One-year Estimated School Enrollment, GLM-clustered std, College enrollment for population over 3 years")
-sens.gls.enroll_college_3plus <- sensitivity(0.1387, 0.0433, 7776,
-                                                  "One-year Estimated School Enrollment, GLS std, College enrollment for population over 3 years")
+sens.lm.enroll_college_3plus <- sensitivity(1.03, 0.032, 8122,
+                                                  "One-year Estimated School Enrollment, OLS, College enrollment for population over 3 years")
 
 ##Compare actual vs. predicted value
 compare.predicted.values(df_enroll_1y, "college_3_plusD",
-                         glm.enroll_college_3plus$model, glm.cluster.enroll_college_3plus$model, gls.enroll_college_3plus$model)
+                         glm.enroll_college_3plus$model, glm.cluster.enroll_college_3plus$model, lm.enroll_college_3plus$model)
 
 
 ##Enrollment: graduate or professional school, 3years plus
@@ -329,25 +291,19 @@ glm.enroll_grad_prof_3plus <- m.glm(df_enroll_1y, "grad_prof_3_plusD")
 glm.robust.enroll_grad_prof_3plus<-m.glm.robust(glm.enroll_grad_prof_3plus$model)
 ####GML model with clustered sd
 glm.cluster.enroll_grad_prof_3plus <- m.glm.cluster(df_enroll_1y, "grad_prof_3_plusD")
-####GLS model
-gls.enroll_grad_prof_3plus <- m.gls(df_enroll_1y, "grad_prof_3_plusD")
+####OLS model
+lm.enroll_grad_prof_3plus <- m.gls(df_enroll_1y, "grad_prof_3_plusD")
 
 ###Get model summary
 glm.enroll_grad_prof_3plus$summary
 glm.robust.enroll_grad_prof_3plus
 glm.cluster.enroll_grad_prof_3plus$summary
-gls.enroll_grad_prof_3plus$summary
+lm.enroll_grad_prof_3plus$summary
 
 ###Get sensitivity analysis
-sens.glm.enroll_grad_prof_3plus <- sensitivity(8.640, 0.1686, 7776,
-                                             "One-year Estimated School Enrollment, GLM, Graduate or professional school enrollment for population over 3 years")
-sens.glm.robust.enroll_grad_prof_3plus <- sensitivity(8.640, 0.2088, 7776,
-                                                    "One-year Estimated School Enrollment, GLM-robust std, Graduate or professional school enrollment for population over 3 years")
-sens.glm.cluster.enroll_grad_prof_3plus <- sensitivity(8.640, 0.5651, 7776,
-                                                     "One-year Estimated School Enrollment, GLM-clustered std, Graduate or professional school enrollment for population over 3 years")
-sens.gls.enroll_grad_prof_3plus <- sensitivity(0.164, 0.0170, 7776,
-                                             "One-year Estimated School Enrollment, GLS std, Graduate or professional school enrollment for population over 3 years")
+sens.lm.enroll_grad_prof_3plus <- sensitivity(0.43, 0.0087, 8122,
+                                             "One-year Estimated School Enrollment, OLS, Graduate or professional school enrollment for population over 3 years")
 
 ##Compare actual vs. predicted value
 compare.predicted.values(df_enroll_1y, "grad_prof_3_plusD",
-                         glm.enroll_college_3plus$model, glm.cluster.enroll_college_3plus$model, gls.enroll_college_3plus$model)
+                         glm.enroll_college_3plus$model, glm.cluster.enroll_college_3plus$model, lm.enroll_college_3plus$model)
